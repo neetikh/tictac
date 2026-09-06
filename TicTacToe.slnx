@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/backend/" />
+  <Folder Name="/backend/src/">
+    <Project Path="backend/src/TicTacToe.Api/TicTacToe.Api.csproj" />
+    <Project Path="backend/src/TicTacToe.Domain/TicTacToe.Domain.csproj" />
+  </Folder>
+  <Folder Name="/backend/tests/">
+    <Project Path="backend/tests/TicTacToe.Api.Tests/TicTacToe.Api.Tests.csproj" />
+    <Project Path="backend/tests/TicTacToe.Domain.Tests/TicTacToe.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

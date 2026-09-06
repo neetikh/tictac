@@ -1,0 +1,17 @@
+## .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+.vs/
+*.sln.DotSettings.user
+
+## Node / Angular
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+## OS / IDE
+.DS_Store
+.idea/
+*.log
