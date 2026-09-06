@@ -1,0 +1,117 @@
+<div class="page">
+  <header class="hero">
+    <p class="eyebrow">Round 2</p>
+    <h1>Tic Tac Toe</h1>
+    <p class="lede">Angular frontend with a .NET Web API that owns the board, history, and scoreboard.</p>
+  </header>
+
+  <section class="toolbar">
+    <div class="modes" role="group" aria-label="Game mode">
+      <button
+        type="button"
+        class="mode"
+        [class.active]="game?.mode === 'TwoPlayer'"
+        (click)="startGame('TwoPlayer')">
+        Two Player
+      </button>
+      <button
+        type="button"
+        class="mode"
+        [class.active]="game?.mode === 'Computer'"
+        (click)="startGame('Computer')">
+        Play Against Computer
+      </button>
+    </div>
+    <p class="mode-hint">{{ game ? modeLabel(game.mode) : '' }}</p>
+  </section>
+
+  @if (error) {
+    <p class="banner error" role="alert">{{ error }}</p>
+  }
+
+  <p class="banner status" [class.win]="game?.status === 'Won'" [class.draw]="game?.status === 'Draw'">
+    {{ statusMessage() }}
+  </p>
+
+  <main class="layout">
+    <section class="panel board-panel">
+      <div class="board" role="grid" aria-label="Tic Tac Toe board">
+        @for (row of rows; track row) {
+          @for (col of rows; track col) {
+            <button
+              type="button"
+              class="cell"
+              role="gridcell"
+              [class.win]="isWinningCell(row, col)"
+              [class.x]="cell(row, col) === 'X'"
+              [class.o]="cell(row, col) === 'O'"
+              [disabled]="!canPlay(row, col)"
+              (click)="play(row, col)"
+              [attr.aria-label]="positionLabel(row, col)">
+              {{ cell(row, col) }}
+            </button>
+          }
+        }
+      </div>
+
+      <div class="actions">
+        <button type="button" class="action" [disabled]="!game?.canUndo || busy" (click)="undo()">
+          Undo Last Move
+        </button>
+        <button type="button" class="action" [disabled]="!game || busy" (click)="resetGame()">
+          Reset Game
+        </button>
+        <button type="button" class="action ghost" [disabled]="!game || busy" (click)="resetScoreboard()">
+          Reset Scoreboard
+        </button>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="panel">
+        <h2>Scoreboard</h2>
+        <div class="scores">
+          <div class="score">
+            <span>X wins</span>
+            <strong>{{ game?.scoreboard?.xWins ?? 0 }}</strong>
+          </div>
+          <div class="score">
+            <span>O wins</span>
+            <strong>{{ game?.scoreboard?.oWins ?? 0 }}</strong>
+          </div>
+          <div class="score">
+            <span>Draws</span>
+            <strong>{{ game?.scoreboard?.draws ?? 0 }}</strong>
+          </div>
+        </div>
+        <p class="note">Session totals. Reset Game keeps these numbers; Undo after a finished game rolls the last result back.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Move History</h2>
+        @if (!game?.moveHistory?.length) {
+          <p class="empty">No moves yet.</p>
+        } @else {
+          <table>
+            <thead>
+              <tr>
+                <th>Move</th>
+                <th>Player</th>
+                <th>Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (move of game!.moveHistory; track move.moveNumber) {
+                <tr>
+                  <td>{{ move.moveNumber }}</td>
+                  <td>{{ playerMark(move.player) }}</td>
+                  <td>{{ move.position }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    </aside>
+  </main>
+</div>
